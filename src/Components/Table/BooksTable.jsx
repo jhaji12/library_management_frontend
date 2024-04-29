@@ -6,11 +6,20 @@ import {
   Tr,
   Th,
   Td,
-  Text,
+  Flex,
   TableContainer,
+  Icon,
+  IconButton,
 } from "@chakra-ui/react";
+import { MdEdit, MdDelete } from "react-icons/md";
 
-export const BooksTable = ({ data }) => {
+export const BooksTable = ({
+  data,
+  setBookDetails,
+  fetchBookById,
+  setEditBookModal,
+  handleDeleteBook,
+}) => {
   return (
     <TableContainer
       w="80vw"
@@ -30,6 +39,7 @@ export const BooksTable = ({ data }) => {
             <Th>Publication</Th>
             <Th>Shelf</Th>
             <Th>Available Copies</Th>
+            <Th>Status</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -43,6 +53,32 @@ export const BooksTable = ({ data }) => {
               <Td>{item.publication}</Td>
               <Td>{item.shelf_name}</Td>
               <Td>{item.available_copies}</Td>
+              <Th>
+                <Flex gap={2} py={1} bgColor={"gray.100"}>
+                  <IconButton
+                    cursor="pointer"
+                    p={1}
+                    as={MdEdit}
+                    onClick={async () => {
+                      try {
+                        const bookId = item.book_id;
+                        const bookDetails = await fetchBookById(bookId);
+                        setBookDetails(bookDetails);
+                        setEditBookModal({ open: true, data: bookDetails });
+                      } catch (error) {
+                        console.error("Error fetching book details:", error);
+                      }
+                    }}
+                  />
+                  <IconButton
+                    cursor="pointer"
+                    p={1}
+                    variant={"delete"}
+                    as={MdDelete}
+                    onClick={() => handleDeleteBook(item.book_id)}
+                  />
+                </Flex>
+              </Th>
             </Tr>
           ))}
         </Tbody>

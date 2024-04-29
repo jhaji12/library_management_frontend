@@ -2,13 +2,57 @@
   "name": "library_management_frontend",
   "private": true,
   "version": "0.0.0",
-  "main": "main.cjs",
+  "type": "module",
+  "main": "public/main.js",
+  "homepage": "./",
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "electron": "electron ."
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "start-electron": "set ELECTRON_START_URL=http://localhost:3000 && electron .",
+    "package": "electron-builder build --win -c.extraMetadata.main=dist/main.js --publish never",
+    "publish": "electron-builder build --win --publish always"
+  },
+  "build": {
+    "appId": "com.demo.about",
+    "copyright": "Copyright demo.com",
+    "publish": {
+      "provider": "github",
+      "private": false,
+      "owner": "jyotijha"
+    },
+    "mac": {
+      "publish": {
+        "provider": "github",
+        "owner": "demo",
+        "repo": "Repository Name",
+        "private": false,
+        "token": ""
+      }
+    },
+    "win": {
+      "publish": {
+        "provider": "github",
+        "owner": "demo",
+        "repo": "Repository Name",
+        "private": false,
+        "token": ""
+      },
+      "publisherName": "demo"
+    },
+    "linux": {
+      "category": "Utility"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "nsis": {
+      "installerIcon": "build/icon.ico",
+      "installerHeaderIcon": "build/icon.ico",
+      "deleteAppDataOnUninstall": true
+    }
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
@@ -22,6 +66,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^5.1.0",
     "react-router-dom": "^6.23.0",
+    "react-scripts": "^5.0.1",
     "vercel": "^34.1.3"
   },
   "devDependencies": {
@@ -29,6 +74,7 @@
     "@types/react-dom": "^18.2.22",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "electron": "^30.0.1",
+    "electron-builder": "^24.13.3",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",

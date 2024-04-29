@@ -10,5 +10,6 @@ export { BooksTable } from "./Table/BooksTable";
 export { LendModal } from "./LendModal";
 export { ReturnModal } from "./ReturnModal";
 export { AddBookModal } from "./AddBook";
+export { EditBookModal } from "./EditBook";
 export { AddMemberModal } from "./AddMember";
 export { StudentDetailsModal } from "./StudentDetailsModal";

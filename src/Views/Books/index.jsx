@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
+  Box,
   Tabs,
   TabList,
   TabPanels,
@@ -7,15 +8,30 @@ import {
   TabPanel,
   Flex,
   Button,
+  useToast,
 } from "@chakra-ui/react";
-import { BooksTable, LentBooksTable, AddBookModal } from "../../Components";
+import {
+  BooksTable,
+  LentBooksTable,
+  AddBookModal,
+  EditBookModal,
+  Search,
+} from "../../Components";
 import { ApiService } from "../../Services/datasetAPIService";
 
 export const Books = () => {
   const [books, setBooks] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [lent, setLent] = useState([]);
   const [returned, setReturned] = useState([]);
   const [addBookModal, setAddBookModal] = useState({ open: false, data: null });
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [editBookModal, setEditBookModal] = useState({
+    open: false,
+    data: null,
+  });
+  const toast = useToast();
+
   const [bookDetails, setBookDetails] = useState({
     book_id: "",
     title: "",
@@ -34,12 +50,28 @@ export const Books = () => {
     }));
   };
 
-  const handleSubmit = async () => {
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setBookDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+  };
+
+  const fetchBookById = async (bookId) => {
     try {
-      // Make API call to add the book
-      const response = await ApiService.books.addBook(bookDetails);
-      console.log("Book added successfully:", response);
-      // Reset book details after submission
+      const response = await ApiService.books.getBookById(bookId);
+      return response;
+    } catch (error) {
+      console.error("Error fetching book details:", error);
+      throw error;
+    }
+  };
+
+  const handleEditBook = async () => {
+    try {
+      const response = await ApiService.books.editBook(bookDetails);
+      console.log("Book edited successfully:", response);
       setBookDetails({
         book_id: "",
         title: "",
@@ -49,13 +81,58 @@ export const Books = () => {
         shelf_name: "",
         available_copies: 0,
       });
-      // Close the modal
-      setAddBookModal({ open: false, data: null });
-      // Refetch books data to update the table
+      setEditBookModal({ open: false, data: null });
       fetchBooks();
+      toast({
+        title: "Book Edited",
+        description: "The book has been edited successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error editing book:", error);
+      toast({
+        title: "Error Editing Book",
+        description: "An error occurred while editing the book.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await ApiService.books.addBook(bookDetails);
+      console.log("Book added successfully:", response);
+      setBookDetails({
+        book_id: "",
+        title: "",
+        vendor: "",
+        language: "",
+        publication: "",
+        shelf_name: "",
+        available_copies: 0,
+      });
+      setAddBookModal({ open: false, data: null });
+      fetchBooks();
+      toast({
+        title: "Book Added",
+        description: "The book has been added successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
     } catch (error) {
       console.error("Error adding book:", error);
-      // Handle error
+      toast({
+        title: "Error Adding Book",
+        description: "An error occurred while adding the book.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -89,6 +166,54 @@ export const Books = () => {
     }
   };
 
+  const handleDeleteBook = async (bookId) => {
+    try {
+      await ApiService.books.deleteBook(bookId);
+      fetchBooks();
+      toast({
+        title: "Book Deleted",
+        description: "The book has been deleted successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.error("Error deleting book:", error);
+      toast({
+        title: "Error Deleting Book",
+        description: "An error occurred while deleting the book.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleSearch = async () => {
+    try {
+      if (searchQuery.trim() === "") {
+        // If search query is empty, fetch all books
+        fetchBooks();
+      } else {
+        // If search query is not empty, filter books based on search query
+        const response = await ApiService.books.getAll();
+        const filteredBook = response.filter(
+          (book) => book.book_id === searchQuery
+        );
+        setBooks(filteredBook);
+      }
+    } catch (error) {
+      console.error("Error fetching book details:", error);
+      toast({
+        title: "Error Searching Book",
+        description: "An error occurred while searching for the book.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   // Fetch data on initial component mount
   useEffect(() => {
     fetchBooks();
@@ -101,28 +226,32 @@ export const Books = () => {
       <Tabs
         w="100%"
         onChange={(index) => {
+          setActiveTabIndex(index); // Update active tab index
           // Fetch data based on tab index
           if (index === 0) {
-            console.log(index);
             fetchBooks();
           } else if (index === 1) {
-            console.log(index);
             fetchLentBooks();
           } else if (index === 2) {
-            console.log(index);
             fetchReturnedBooks();
           }
         }}
       >
         <TabList>
           <Tab>All Books</Tab>
-          <Tab>Lent</Tab>
+          <Tab>Issued</Tab>
           <Tab>Returned</Tab>
         </TabList>
 
         <TabPanels w="100%">
           <TabPanel>
-            <BooksTable data={books} />
+            <BooksTable
+              data={books}
+              setBookDetails={setBookDetails}
+              fetchBookById={fetchBookById}
+              setEditBookModal={setEditBookModal}
+              handleDeleteBook={handleDeleteBook}
+            />
           </TabPanel>
           <TabPanel>
             <LentBooksTable data={lent} />
@@ -132,13 +261,29 @@ export const Books = () => {
           </TabPanel>
         </TabPanels>
       </Tabs>
-      {/* <Button
+      {activeTabIndex === 0 && (
+        <Box
+          w="300px"
+          pos="absolute"
+          top={2}
+          right={32}
+          justifyContent={"center"}
+        >
+          <Search
+            placeholder={`Search book details by Book Id`}
+            onSearch={handleSearch}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+        </Box>
+      )}
+      <Button
         pos="absolute"
         right={4}
         onClick={() => setAddBookModal({ open: true, data: null })}
       >
         + Add Book
-      </Button> */}
+      </Button>
       <AddBookModal
         isOpen={addBookModal.open}
         data={addBookModal.data}
@@ -146,6 +291,14 @@ export const Books = () => {
         bookDetails={bookDetails}
         handleInputChange={handleInputChange}
         handleSubmit={handleSubmit}
+      />
+      <EditBookModal
+        isOpen={editBookModal.open}
+        data={editBookModal.data}
+        onClose={() => setEditBookModal({ open: false, data: null })}
+        bookDetails={bookDetails}
+        handleInputChange={handleEditInputChange}
+        handleSubmit={handleEditBook}
       />
     </Flex>
   );

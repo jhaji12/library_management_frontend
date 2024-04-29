@@ -65,6 +65,14 @@ export const ApiService = {
         throw error;
       }
     },
+    getBookById: async (bookId) => {
+      try {
+        const response = await axios.get(`${BASE_URL}/books/${bookId}`);
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
     addBook: async (bookData) => {
       try {
         bookData["accession_date"] = new Date().toISOString().split("T")[0];
@@ -78,6 +86,39 @@ export const ApiService = {
           data: bookData,
         };
         console.log(config);
+        const response = await axios(config);
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+    editBook: async (bookData) => {
+      try {
+        const token = localStorage.getItem("token");
+        const config = {
+          method: "PUT",
+          url: `${BASE_URL}/books/${bookData.book_id}/edit/`,
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+          data: bookData,
+        };
+        const response = await axios(config);
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+    deleteBook: async (bookId) => {
+      try {
+        const token = localStorage.getItem("token");
+        const config = {
+          method: "DELETE",
+          url: `${BASE_URL}/books/${bookId}/delete/`, // Assuming the API endpoint for deleting a book is `/books/{id}/`
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        };
         const response = await axios(config);
         return response.data;
       } catch (error) {

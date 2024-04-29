@@ -264,7 +264,7 @@ export const Overview = () => {
             w="140px"
             onClick={() => setLendModal({ open: true, data: null })}
           >
-            Lend
+            Issue
           </Button>
           <Button
             size="md"

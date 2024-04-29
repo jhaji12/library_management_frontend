@@ -29,7 +29,7 @@ export const LendModal = ({
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Lend Book</ModalHeader>
+        <ModalHeader>Issue Book</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Box mb={4}>
@@ -65,7 +65,7 @@ export const LendModal = ({
         </ModalBody>
         <ModalFooter>
           <Button mr={3} onClick={handleSubmit}>
-            Lend
+            Submit
           </Button>
           <Button onClick={onClose} variant="outline">
             Cancel
