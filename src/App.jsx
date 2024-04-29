@@ -20,7 +20,7 @@ const App = () => {
     // Store the token in localStorage
     localStorage.setItem("token", token);
     setIsLoggedIn(true);
-    return <Navigate to="/" />;
+    return <Navigate to="/overview" />;
   };
 
   return (
@@ -38,7 +38,7 @@ const App = () => {
                 <Route path="/overview" element={<Overview />} />
                 <Route path="/books" element={<Books />} />
                 <Route path="/Members" element={<Members />} />
-                <Route path="*" element={<Navigate to="/" />} />
+                <Route path="*" element={<Navigate to="/overview" />} />
               </Routes>
             </Box>
           </Flex>
