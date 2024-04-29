@@ -117,8 +117,6 @@ export const Overview = () => {
     e.preventDefault();
     try {
       const response = await ApiService.issues.addIssue(formData);
-      // Handle success response
-      console.log("Book issued successfully:", response);
       // Reset form and state
       setFormData({ book_id: "", issuer_id: "", is_student: true });
       setErrorMessage("");

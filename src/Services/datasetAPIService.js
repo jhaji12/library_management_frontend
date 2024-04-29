@@ -113,7 +113,19 @@ export const ApiService = {
       }
     },
     addIssue: async (issueData) => {
+      console.log("issue data", issueData);
       try {
+        if (
+          (issueData.is_student === true) |
+          (issueData.is_student === "true")
+        ) {
+          issueData.is_student = true;
+        } else if (
+          (issueData.is_student === false) |
+          (issueData.is_student === "false")
+        ) {
+          issueData.is_student = false;
+        }
         const token = localStorage.getItem("token");
         const config = {
           method: "POST",
