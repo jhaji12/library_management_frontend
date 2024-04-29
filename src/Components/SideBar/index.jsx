@@ -42,9 +42,18 @@ export const Sidebar = () => {
   };
 
   useEffect(() => {
-    const currentPath = location.pathname;
-    setActiveState(currentPath);
-  }, [location]);
+    const currentPath = location.pathname || "/overview";
+    // Check if the current path is a valid menu link
+    const isValidMenuLink = menus.some((menu) => menu.link === currentPath);
+
+    // Set active state only if the current path is a valid menu link
+    if (isValidMenuLink) {
+      setActiveState(currentPath);
+    } else {
+      // If the current path is not a valid menu link, set it to the default
+      setActiveState("/overview");
+    }
+  }, [location, menus]);
 
   return (
     <Flex

@@ -27,7 +27,6 @@ export const EditBookModal = ({
       isCentered
       closeOnOverlayClick={false}
     >
-      {console.log("sn ckjd", data)}
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Edit Book</ModalHeader>

@@ -85,7 +85,6 @@ export const ApiService = {
           },
           data: bookData,
         };
-        console.log(config);
         const response = await axios(config);
         return response.data;
       } catch (error) {
@@ -154,7 +153,6 @@ export const ApiService = {
       }
     },
     addIssue: async (issueData) => {
-      console.log("issue data", issueData);
       try {
         if (
           (issueData.is_student === true) |

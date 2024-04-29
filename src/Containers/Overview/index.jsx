@@ -46,7 +46,6 @@ export const Overview = () => {
   const fetchBooks = async () => {
     try {
       const issuedData = await ApiService.issues.getAllIssues();
-      console.log("******", issuedData);
       setIssuedlist(issuedData);
     } catch (error) {
       console.error("Error fetching issued books:", error);
