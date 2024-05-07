@@ -2,14 +2,14 @@
   "name": "library_management_frontend",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
-  "main": "public/main.js",
+  "main": "electron-main.js",
   "homepage": "./",
   "scripts": {
     "start": "vite",
     "build": "vite build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "electron": "electron .",
     "start-electron": "set ELECTRON_START_URL=http://localhost:3000 && electron .",
     "package": "electron-builder build --win -c.extraMetadata.main=dist/main.js --publish never",
     "publish": "electron-builder build --win --publish always"
@@ -20,7 +20,7 @@
     "publish": {
       "provider": "github",
       "private": false,
-      "owner": "jyotijha"
+      "owner": "jhaji12"
     },
     "mac": {
       "publish": {
@@ -45,12 +45,12 @@
       "category": "Utility"
     },
     "files": [
-      "build/**/*",
+      "dist/**/*",
       "node_modules/**/*"
     ],
     "nsis": {
-      "installerIcon": "build/icon.ico",
-      "installerHeaderIcon": "build/icon.ico",
+      "installerIcon": "dist/icon.ico",
+      "installerHeaderIcon": "dist/icon.ico",
       "deleteAppDataOnUninstall": true
     }
   },
@@ -75,6 +75,7 @@
     "@vitejs/plugin-react-swc": "^3.5.0",
     "electron": "^30.0.1",
     "electron-builder": "^24.13.3",
+    "electron-forge": "^5.2.4",
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",

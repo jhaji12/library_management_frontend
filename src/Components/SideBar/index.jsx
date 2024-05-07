@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Text, Flex, Icon, Button } from "@chakra-ui/react";
 import { FaBook, FaUsers, FaChartBar } from "react-icons/fa";
-import { useNavigate, useLocation } from "react-router-dom";
-import books from "../../Resources/books.svg";
-import { ApiService } from "../../Services/datasetAPIService";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export const Sidebar = () => {
-  const navigate = useNavigate();
+export const Sidebar = ({ activeState, setActiveState, handleLogout }) => {
   const location = useLocation();
-  const [activeState, setActiveState] = useState("");
+  const navigate = useNavigate();
 
   const menus = [
     {
@@ -28,19 +25,6 @@ export const Sidebar = () => {
     },
   ];
 
-  const handleLogout = async () => {
-    try {
-      await ApiService.logout();
-      // Clear user-related data from localStorage or state
-      localStorage.removeItem("token");
-      window.location.reload();
-      // Redirect the user to the login page or perform any other necessary actions
-    } catch (error) {
-      console.error("Error logging out:", error);
-      // Handle error (e.g., show a toast message)
-    }
-  };
-
   useEffect(() => {
     const currentPath = location.pathname || "/overview";
     // Check if the current path is a valid menu link
@@ -57,7 +41,7 @@ export const Sidebar = () => {
 
   return (
     <Flex
-      w="300px"
+      minW="220px"
       h="calc(100vh - 80px)"
       direction="column"
       justifyContent="space-between"

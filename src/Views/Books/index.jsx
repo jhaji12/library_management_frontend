@@ -8,6 +8,7 @@ import {
   TabPanel,
   Flex,
   Button,
+  Tag,
   useToast,
 } from "@chakra-ui/react";
 import {
@@ -238,9 +239,15 @@ export const Books = () => {
         }}
       >
         <TabList>
-          <Tab>All Books</Tab>
-          <Tab>Issued</Tab>
-          <Tab>Returned</Tab>
+          <Tab>
+            All Books <Tag>{books.length}</Tag>
+          </Tab>
+          <Tab>
+            Issued <Tag>{lent.length}</Tag>
+          </Tab>
+          <Tab>
+            Returned <Tag>{returned.length}</Tag>
+          </Tab>
         </TabList>
 
         <TabPanels w="100%">

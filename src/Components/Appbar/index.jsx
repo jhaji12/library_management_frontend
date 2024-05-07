@@ -1,9 +1,10 @@
+import React from "react";
 import { Flex, Box, Image, Text } from "@chakra-ui/react";
 import logo from "../../Resources/logo.png";
-import { Search } from "../SearchBar";
+import { Search } from "../SearchBar/index.jsx";
 import { useState } from "react";
-import { ApiService } from "../../Services/datasetAPIService";
-import { StudentDetailsModal } from "../StudentDetailsModal";
+import { ApiService } from "../../Services/datasetAPIService.js";
+import { StudentDetailsModal } from "../StudentDetailsModal/index.jsx";
 
 export const Appbar = () => {
   const [studentDetails, setStudentDetails] = useState(null);
@@ -37,7 +38,6 @@ export const Appbar = () => {
         width="100%"
         height={"80px"}
         bg="primary.lightest"
-        pos="fixed"
         boxShadow="rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px"
       >
         <Flex justifyContent={"flex-start"} align={"center"} gap={"2"}>
