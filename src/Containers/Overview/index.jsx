@@ -34,6 +34,8 @@ export const Overview = () => {
     book_id: "", // Initialize with empty values
     issuer_id: "",
     is_student: true,
+    days: 7,
+    fine: 5,
   });
   const [returnData, setReturnData] = useState({
     book_id: "", // Initialize with empty values
@@ -45,7 +47,7 @@ export const Overview = () => {
   // Function to fetch books data
   const fetchBooks = async () => {
     try {
-      const issuedData = await ApiService.issues.getAllIssues();
+      const issuedData = await ApiService.issues.getLendBooks();
       setIssuedlist(issuedData);
     } catch (error) {
       console.error("Error fetching issued books:", error);
@@ -117,7 +119,13 @@ export const Overview = () => {
     try {
       const response = await ApiService.issues.addIssue(formData);
       // Reset form and state
-      setFormData({ book_id: "", issuer_id: "", is_student: true });
+      setFormData({
+        book_id: "",
+        issuer_id: "",
+        is_student: true,
+        days: 7,
+        fine: 5,
+      });
       setErrorMessage("");
       setLendModal({ open: false, data: null });
       toast({

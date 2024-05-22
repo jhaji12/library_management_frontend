@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Button,
@@ -61,6 +62,26 @@ export const LendModal = ({
               <option value={true}>Student</option>
               <option value={false}>Faculty</option>
             </Select>
+          </Box>
+          <Box mb={4}>
+            <Text>Days:</Text>
+            <Input
+              name="days"
+              type="number"
+              value={formData?.days}
+              onChange={handleInputChange}
+              placeholder="Enter number of days for lending"
+            />
+          </Box>
+          <Box mb={4}>
+            <Text>Fine:</Text>
+            <Input
+              name="fine"
+              type="number"
+              value={formData?.fine}
+              onChange={handleInputChange}
+              placeholder="Enter the amount for overdue per day"
+            />
           </Box>
         </ModalBody>
         <ModalFooter>
